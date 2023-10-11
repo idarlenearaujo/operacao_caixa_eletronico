@@ -34,8 +34,7 @@ def depositar_cash(valor_conta):
                 print("SALDO INSUFICIENTE!!!") 
             
         except:
-            print('O valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.'
-            +'\nInforme um valor válido.')
+            print('O valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.\nInforme um valor válido.')
     
     else:
         print('Você atingiu o limite de 3 saques')                                                                                                                     
@@ -50,5 +49,5 @@ def extrato_cash(valor_conta, historico_conta):
     for dados in historico_conta:
         print(dados)
 
-    print(f"\nValor em conta atualizado: R$ {valor_conta}")
+    print(f"\nValor em conta atualizado: R$ {valor_conta:.2f}")
 ```
