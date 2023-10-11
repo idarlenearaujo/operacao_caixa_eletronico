@@ -7,4 +7,15 @@ Projeto em Python - Diretrizes Fundamentais:
 *	**Extrato:** :memo: Essa operação deve listar todos os depósitos e saques realizados na conta. No fim da listagem deve ser exibido o saldo atual da conta. Os valores devem ser exibidos utilizando o formato R$ xxx.xx, exmplo: 1500.45 = R$ 1500.45
 
 
-```print```
+```
+def depositar_cash(valor_conta): # função para depositar na conta, existe verificação de valores negativos
+    
+    try:
+        valor_deposito = float(input("Digite o valor que deseja depositar: ")) # recebe o valor
+
+        if valor_deposito > 0: # verifica e se maior que 0 retorna valor para conta
+            return valor_deposito
+    
+    except:
+        print('ENTRADA INVÁLIDA!!!\nValor esperado: > 0.00\nInforme um valor válido.') # se valor 0 ou inferior, retorna uma mensagem e o valor 0 para conta
+```
