@@ -8,13 +8,13 @@ Projeto em Python - Diretrizes Fundamentais:
 def depositar_cash(valor_conta): 
     
     try:
-        valor_deposito = float(input("Digite o valor que deseja depositar: ")) 
+        valor_deposito = float(input("\nDigite o valor que deseja depositar: ")) 
 
         if valor_deposito > 0: 
             return valor_deposito
     
     except:
-        print('ENTRADA INVÁLIDA!!!\nValor esperado: > 0.00\nInforme um valor válido.')
+        print('\nENTRADA INVÁLIDA!!!\nValor esperado: > 0.00\nInforme um valor válido.')
 ```
 
 *	**Saque:** :money_with_wings: O sistema deve permitir realizar 3 saques diários com limite máximo de R$ 500,00 por saque. Caso o usuário não tenha saldo em conta, o sistema deve exibir uma mesnagem informando que não será possível sacar o dinheiro por falta de saldo. Todos os saques devem ser armazenados em uma variável e exibidos na operação de extrato.
@@ -25,16 +25,19 @@ def depositar_cash(valor_conta):
     if saques_realizados < 3:
         
         try:
-            valor_saque = float(input("Digite o valor que deseja sacar: ")) 
+            valor_saque = float(input("\nDigite o valor que deseja sacar: ")) 
 
             if 0 < valor_saque <= 500:
                 if valor_conta >= valor_saque:
                     return valor_saque 
                 
-                print("SALDO INSUFICIENTE!!!") 
+                print("\nSALDO INSUFICIENTE!!!") 
             
+            else:
+                print('\nO valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.\nInforme um valor válido.')
+        
         except:
-            print('O valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.\nInforme um valor válido.')
+            print('Valor inválido informado.)
     
     else:
         print('Você atingiu o limite de 3 saques')                                                                                                                     
