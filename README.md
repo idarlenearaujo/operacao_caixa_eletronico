@@ -2,7 +2,7 @@
 
 Projeto em Python - Diretrizes Fundamentais:
 
-*	**Depósito:** :moneybag: Deve ser possível depositar valores positivos para a minha conta bancária. A V1 (versão 1) do projeto trabalha apenas com 1 usuário, dessa forma não precisamos nos preocupar em identificar qual é o número da agência e conta bancária. Todos os depósitos devem ser armazenados em uma variável e exibidos na operação de extrato.
+*	**Depósito:** :moneybag: Deve ser possível depositar valores positivos para uma conta bancária. A V1 (versão 1) do projeto trabalha apenas com 1 usuário, dessa forma não precisamos nos preocupar em identificar qual é o número da agência e conta bancária. Todos os depósitos devem ser armazenados em uma variável e exibidos na operação de extrato.
 
 ```
 def depositar_cash(valor_conta): 
@@ -28,13 +28,14 @@ def depositar_cash(valor_conta):
             valor_saque = float(input("Digite o valor que deseja sacar: ")) 
 
             if 0 < valor_saque <= 500:
-                if valor_conta >= valor_saque: # verifica se existe saldo
+                if valor_conta >= valor_saque:
                     return valor_saque 
                 
                 print("SALDO INSUFICIENTE!!!") 
             
         except:
-            print('O valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.\nInforme um valor válido.')
+            print('O valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.'
+            +'\nInforme um valor válido.')
     
     else:
         print('Você atingiu o limite de 3 saques')                                                                                                                     
