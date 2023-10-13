@@ -31,7 +31,8 @@ def depositar_cash(valor_conta):
                 if valor_conta >= valor_saque:
                     return valor_saque 
                 
-                print("\nSALDO INSUFICIENTE!!!") 
+                else:
+                    print("\nSALDO INSUFICIENTE!!!") 
             
             else:
                 print('\nO valor informado não deve ser zero, valor negativo ou superior a R$ 500.00.\nInforme um valor válido.')
