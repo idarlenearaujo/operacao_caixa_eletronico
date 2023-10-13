@@ -75,12 +75,12 @@ def cadastrar_cliente(clientes):
 
     cliente['cpf'] = input('\nDigite o CPF:')
 
-    if not cpf_exists(cliente['cpf'], clientes): # Conferência de cadastro
+    if not cpf_exists(cliente['cpf'], clientes):
         cliente['nome'] = input('\nDigite o nome: ')
         cliente['data_nascimento'] = input('\nDigite data de nascimento: ') 
         cliente['endereco'] = input('\nDigite o endereco [Rua, número - Bairro - Cidade - UF]: ')
     
-        clientes.append(cliente) # Aramazenando em uma lista
+        clientes.append(cliente)
         print('\nCliente Cadastrado!\n')
 
     else:
