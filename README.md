@@ -54,3 +54,82 @@ def extrato_cash(valor_conta, historico_conta):
 
     print(f"\nValor em conta atualizado: R$ {valor_conta:.2f}")
 ```
+
+# Modificações no projeto v2 :mechanic:
+
+Criar três novas funções: 
+
+*   Cadastrar usuário (cliente do banco);
+*   Cadastrar conta bancária (vincular com usuário);
+*   Listar contas cadastradas.
+
+Descrição:
+
+*   O programa deve armazenar os usuários em uma lista, um usuário é composto por: nome, data de nascimento, cpf e endereço. O endereço é uma string com o formato: logradouro, nro - bairro - cidade/sigla - estado. Deve ser armazenado somente os números do CPF. Não podemos cadastrar 2 usuários com o mesmo CPF.
+
+```
+# Cadastrar cliente
+def cadastrar_cliente(clientes):
+
+    cliente = {}
+
+    cliente['cpf'] = input('\nDigite o CPF:')
+
+    if not cpf_exists(cliente['cpf'], clientes): # Conferência de cadastro
+        cliente['nome'] = input('\nDigite o nome: ')
+        cliente['data_nascimento'] = input('\nDigite data de nascimento: ') 
+        cliente['endereco'] = input('\nDigite o endereco [Rua, número - Bairro - Cidade - UF]: ')
+    
+        clientes.append(cliente) # Aramazenando em uma lista
+        print('\nCliente Cadastrado!\n')
+
+    else:
+        print('\nCPF já cadastrado!!!\n')
+
+```
+
+*   O programa deve armazenar contas em uma lista, uma conta é composta por: agência, número da conta e usuário. O número da conta é sequencial, inicialmente em 1. O número da agência é fixo: "0001". O usuário pode ter mais de uma conta, mas uma conta pertence a somente um usuário.
+
+```
+def cadastrar_conta(num_conta, clientes):
+
+    conta = {}
+    
+    cpf = input("\nDigite o CPF do cliente: ")
+    
+    if cpf_exists(cpf, clientes):
+
+        conta['cpf'] = cpf
+        conta['agencia'] = '0001'
+        conta['numero_conta'] = num_conta
+        
+        contas.append(conta)
+
+        print('\nConta Cadastrada!\n')
+    
+    else:
+        print('\nCPF não cadastrado!')
+```
+
+*   Para vincular um usuário a uma conta, filtre a lista de usuários buscando o número do CPF informado para cada usuário da lista. Listar clientes e suas contas cadastradas no banco.
+
+```
+def listar_contas():
+    print('\n-------------------------------------------')
+    print('----------------- CONTAS ------------------')
+    print('-------------------------------------------')
+    for conta in contas:
+        print(f"CPF: {conta['cpf']}, Número da Conta: {conta['numero_conta']}")
+    print('-------------------------------------------\n')
+```
+
+```
+def listar_clientes():  
+    print('\n-------------------------------------------')
+    print('---------------- CLIENTES -----------------')
+    print('-------------------------------------------')
+    for cliente in clientes:
+        print(f"Nome: {cliente['nome']}, CPF: {cliente['cpf']}")
+    print('-------------------------------------------\n')
+```
+
