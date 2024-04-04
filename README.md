@@ -135,10 +135,24 @@ def listar_clientes():
 
 # Modificações no projeto v3 :mechanic:
 
-Reformulando o projeto em POO.
+Estamos reformulando o projeto com a abordagem da Programação Orientada a Objetos (POO), que traz inúmeros benefícios, como a criação de softwares mais eficientes, organizados e sustentáveis.
 
-*	Criando classes;
-*	Definindo relacionamentos (herança simples, herança multipla, encapsulamento e polimorfismo)*.
+Nesta atualização, realizamos as seguintes ações:
+* Desenvolvemos novas classes;
+* Implementamos novas funções;
+* Estabelecemos relações entre as classes (através de herança simples, herança múltipla, encapsulamento e polimorfismo).
 
+As classes criadas foram:
 
+* Conta;
+* Cliente;
+* PessoaFisica;
+* ContaCorrente;
+* Historico;
+* Transacao;
+* Saque;
+* Deposito.
 
+Vale destacar que as classes PessoaFisica e ContaCorrente herdam instâncias e métodos das classes Cliente e Conta, respectivamente. Além disso, todas as transações (Deposito e Saque) são armazenadas no histórico de cada Conta pertencente ao respectivo Cliente.
+
+Lembramos que, a cada ação executada no menu, ocorre uma verificação para confirmar se o cliente existe, se há uma conta associada a esse cliente, se há valor disponível para saque, se o número de operações não excedeu o limite e se o valor sacado é menor ou igual ao limite pré-estabelecido.
