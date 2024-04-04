@@ -133,3 +133,12 @@ def listar_clientes():
     print('-------------------------------------------\n')
 ```
 
+# Modificações no projeto v3 :mechanic:
+
+Reformulando o projeto em POO.
+
+*	Criando classes;
+*	Definindo relacionamentos (herança simples, herança multipla, encapsulamento e polimorfismo)*.
+
+
+
