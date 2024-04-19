@@ -156,3 +156,45 @@ As classes criadas foram:
 Vale destacar que as classes PessoaFisica e ContaCorrente herdam instâncias e métodos das classes Cliente e Conta, respectivamente. Além disso, todas as transações (Deposito e Saque) são armazenadas no histórico de cada Conta pertencente ao respectivo Cliente.
 
 Lembramos que, a cada ação executada no menu, ocorre uma verificação para confirmar se o cliente existe, se há uma conta associada a esse cliente, se há valor disponível para saque, se o número de operações não excedeu o limite e se o valor sacado é menor ou igual ao limite pré-estabelecido.
+
+# Modificações no projeto v4 :mechanic:
+
+Reformulado para acrescentar decoradores, iteradores e geradores.
+
+* Decoradoes: São ferramentas poderosas usada para modificar o comportamento de uma função sem alterar seu código interno. Eles são aplicados usando @decorador acima da definição da função. Um decorador é uma função que recebe outra função como argumento.
+
+```
+def minha_funcao(func):
+    def teste(*args, **kwargs):
+        print("Imprimir esta mensagem")
+    return teste
+
+@minha_funcao
+def sacar() [...]
+
+```
+
+* Geradores: São funções que retornam objetos ou itens percorríveis. Essas funções não produzem todos os itens de uma vez, mas eles os produzem conforme há a necessidade. Em suas funções o "return" é substituido por yield, que indica o retorno do next() do gerador criado.
+
+```
+def teste():
+        for item in itens:
+            if item >= 10:
+                yield item
+```
+
+* Iteradores: São objetos iteradores que ultilizam os métodos __iter__() e __next__(). O método __iter__() retorna o próprio objeto iterador e o método __next__() retorna o próximo da sequência até que não haja mais itens e retorna a exceção StopIteration.
+
+```
+class iterador:
+    def __init__(self):
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index < 5:
+            self.index += 1
+        raise StopIteration
+```
