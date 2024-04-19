@@ -198,3 +198,5 @@ class iterador:
             self.index += 1
         raise StopIteration
 ```
+
+Usa-se os geradores para casos mais simples em que não haja complexidade no código e os iteradores para códigos mais robustos que necessitam de algo mais robusto.
