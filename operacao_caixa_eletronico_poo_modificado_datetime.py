@@ -6,15 +6,20 @@ class ContaIterador:
     def __init__(self, contas):
         self._contas = contas
         self._index = 0
+
     def __iter__(self):
         return self
 
     def __next__(self):
-        if self._index < len(self._contas):
-            result = self._contas[self._index]
+        try:
+            conta = self._contas[self._index]
+            return f"""\
+            {conta}
+            """
+        except IndexError:
+            raise StopIteration
+        finally:
             self._index += 1
-            return result
-        raise StopIteration
 
 class Cliente:
     def __init__(self, endereco):
@@ -131,7 +136,7 @@ class ContaCorrente(Conta):
         return False
     
     def __str__(self):
-        return f"""\
+        return f"""
             Agência:\t{self.agencia}
             C/C:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
@@ -161,7 +166,7 @@ class Historico:
             
 
     def transacoes_do_dia(self):
-        data_atual = datetime.utcnow().date()
+        data_atual = datetime.now()
         transacoes = []
         for transacao in self._transacoes:
             data_transacao = datetime.strptime(transacao['data'], "%d-%m-%Y %H:%M:%S").date()
@@ -211,9 +216,9 @@ class Deposito(Transacao):
 
 def log_transacao(func):
     def wrapper(*args, **kwargs):
-        print(f'\nTransação iniciada: {func.__name__.upper()}\n')
+        print(f'{datetime.now()}: Transação iniciada: {func.__name__.upper()}')
         result = func(*args, **kwargs)
-        print(f'\nTransação concluída: {func.__name__.upper()}\n')
+        print(f'{datetime.now()}: Transação concluída: {func.__name__.upper()}')
         return result
     return wrapper
 
@@ -273,12 +278,10 @@ def criar_cliente(clientes):
     data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
     endereco = input("Informe o endereço (Logradouro, Número - Bairro - Cidade/Estado)")
 
-    cliente = PessoaFisica(nome=nome, data_nascimento=data_nascimento, cpf=cpf, endereco=endereco)
-
-    clientes.append(cliente)
+    clientes.append(PessoaFisica(cpf = cpf, nome = nome, data_nascimento = data_nascimento, endereco = endereco))
 
     print("\n==================== Cliente cadastrado com sucesso! ====================")
-
+    
 @log_transacao
 def extrato(clientes):
     

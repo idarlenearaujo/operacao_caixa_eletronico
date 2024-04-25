@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
 import textwrap
 
@@ -14,6 +14,13 @@ class Cliente:
     def adicionar_conta(self, conta):
         self.contas.append(conta)
 
+class PessoaFisica(Cliente):
+    def __init__(self, endereco, cpf, nome, data_nascimento):
+        super().__init__(endereco)
+        self.cpf = cpf
+        self.nome = nome
+        self.data_nascimento = data_nascimento
+
 class Conta:
     def __init__(self, numero, cliente):
         self._cliente = cliente
@@ -23,6 +30,10 @@ class Conta:
         self._historico = Historico()
 
     # Métodos
+    @classmethod    
+    def nova_conta(cls, cliente, numero):
+        return cls(numero, cliente)
+    
     @ property
     def saldo(self):
         return self._saldo
@@ -42,24 +53,25 @@ class Conta:
     @property
     def historico(self):
         return self._historico
-
-    @classmethod    
-    def nova_conta(cls, cliente, numero):
-        return cls(cliente, numero)
     
     def sacar(self, valor):
         
         # Checando se há valor para sacar
-        valor_final = self._saldo - valor
+        saldo = self.saldo
+        valor_final = valor > saldo
 
-        if valor_final >= 0:
+        if valor_final:
+            print("\n@@@ Operação falhou! Você não tem saldo suficiente. @@@")
+
+        if valor > 0:
             self._saldo -= valor
             print("\n=============== Saque realizado com sucesso! ===============")
             return True
 
         else:
-            print("\n@@@ Operação falhou! Você não tem saldo suficiente! @@@")
-            return False
+            print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+            
+        return False
 
     def depositar(self, valor):
 
@@ -74,24 +86,24 @@ class Conta:
 class ContaCorrente(Conta):
     def __init__(self, numero, cliente, limite = 500, limite_saques = 3):
         super().__init__(numero, cliente)
-        self.limite = limite
-        self.limite_saques = limite_saques
+        self._limite = limite
+        self._limite_saques = limite_saques
 
     def sacar(self, valor):
         numero_saques = len(
             [transacao for transacao in self.historico.transacoes if transacao['tipo'] == Saque.__name__]
         )
 
-        excedeu_limmite = valor > self.limite
-        excedeu_saques = numero_saques > self.limite_saques
+        excedeu_limite = valor > self._limite
+        excedeu_saques = numero_saques > self._limite_saques
 
-        if excedeu_limmite:
+        if excedeu_limite:
             print("\n@@@ Operação falhou! Excedeu o valor limite de saque! @@@")
 
         if excedeu_saques:
             print("\n@@@ OPeração falhou! Excedeu a quantidade de operaçãoes permitidas! @@@")
         
-        if not excedeu_limmite and not excedeu_saques:
+        if not excedeu_limite and not excedeu_saques:
             return super().sacar(valor)
         
         return False
@@ -102,13 +114,6 @@ class ContaCorrente(Conta):
             C/C:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
         """
-
-class PessoaFisica(Cliente):
-    def __init__(self, endereco, cpf, nome, data_nascimento):
-        super().__init__(endereco)
-        self.cpf = cpf
-        self.nome = nome
-        self.data_nascimento = data_nascimento
 
 class Historico:
     def __init__(self):
@@ -204,7 +209,7 @@ def criar_contas(numero_contas, clientes, contas):
     conta = ContaCorrente.nova_conta(cliente = cliente, numero = numero_contas)
 
     contas.append(conta)
-    cliente.contas.append(conta)
+    cliente.adicionar_conta(conta)
 
     print("\n==================== Conta criada com sucesso! ====================")
 
@@ -220,7 +225,9 @@ def criar_cliente(clientes):
     data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
     endereco = input("Informe o endereço (Logradouro, Número - Bairro - Cidade/Estado)")
 
-    clientes.append(PessoaFisica(cpf = cpf, nome = nome, data_nascimento = data_nascimento, endereco = endereco))
+    cliente = PessoaFisica(nome=nome, data_nascimento=data_nascimento, cpf=cpf, endereco=endereco)
+
+    clientes.append(cliente)
 
     print("\n==================== Cliente cadastrado com sucesso! ====================")
 
