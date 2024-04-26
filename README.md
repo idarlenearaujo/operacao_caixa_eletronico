@@ -200,3 +200,7 @@ class iterador:
 ```
 
 Usa-se os geradores para casos mais simples em que não haja complexidade no código e os iteradores para códigos mais robustos.
+
+# Modificações no projeto v5 :mechanic:
+
+Armazenando em um arquivo txt os valores informados.
