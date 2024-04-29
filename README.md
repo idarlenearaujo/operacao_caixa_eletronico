@@ -204,3 +204,31 @@ Usa-se os geradores para casos mais simples em que não haja complexidade no có
 # Modificações no projeto v5 :mechanic:
 
 Os valores fornecidos serão armazenados em um arquivo de texto. Este arquivo servirá como um repositório de dados, a partir do qual as informações necessárias serão extraídas para determinar se um cliente já foi registrado anteriormente.
+
+*   Primeira missão: Armazenar os dados inseridos:
+
+```
+# Exemplo
+def __repr__(self) -> str:
+        return f"{self.__class__.__name__}: ({self.cpf}, '{self.nome}')"
+```
+
+*   Com os dados a postos, a missão é escreve-los em um arquivo de texto:
+
+```
+# Exemplo
+with open("arquivo.txt", "w") as arquivo:
+    arquivo.write("Escreve dados")
+
+```
+
+*   E por fim, recuperar os dados escritos para utilizar no sistema sempre que necessário:
+
+```
+# Exemplo
+with open("arquivo.txt", "r") as arquivo:
+    linhas = arquivo.read()
+
+    for linha in linhas:
+        cliente = linha
+```
