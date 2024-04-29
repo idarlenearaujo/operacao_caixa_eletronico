@@ -227,8 +227,6 @@ with open("arquivo.txt", "w") as arquivo:
 ```
 # Exemplo
 with open("arquivo.txt", "r") as arquivo:
-    linhas = arquivo.read()
-
-    for linha in linhas:
+    for linha in arquivo:
         cliente = linha
 ```
