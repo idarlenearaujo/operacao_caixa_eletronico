@@ -203,4 +203,4 @@ Usa-se os geradores para casos mais simples em que não haja complexidade no có
 
 # Modificações no projeto v5 :mechanic:
 
-Armazenando em um arquivo txt os valores informados.
+Os valores fornecidos serão armazenados em um arquivo de texto. Este arquivo servirá como um repositório de dados, a partir do qual as informações necessárias serão extraídas para determinar se um cliente já foi registrado anteriormente.
