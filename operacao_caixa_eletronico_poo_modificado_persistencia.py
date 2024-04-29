@@ -2,7 +2,7 @@ from abc import ABC, abstractclassmethod
 from datetime import datetime
 import textwrap
 from pathlib import Path
-import os, io, ast
+import os, io, ast, re
 
 ROOT_PATH = Path(__file__).parent
 
@@ -53,7 +53,7 @@ class PessoaFisica(Cliente):
         self.data_nascimento = data_nascimento
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}: ({self.cpf})"
+        return f"{self.__class__.__name__}: ({self.cpf}, '{self.nome}')"
 
 class Conta:
     def __init__(self, numero, cliente):
@@ -143,7 +143,7 @@ class ContaCorrente(Conta):
         return False
     
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}: ('{self.agencia}', '{self.numero}', '{self.cliente.nome}')"
+        return f"{self.__class__.__name__}: ('{self.agencia}', '{self.numero}', '{self.cliente.nome}', '{self.cliente.cpf}')"
     
     def __str__(self):
         return f"""
@@ -228,18 +228,39 @@ def impressoes(impress):
     with open(ROOT_PATH / "log.txt", mode = 'a', encoding = 'utf-8') as arquivo:
         arquivo.write(impress)
 
-def leitura():
+def carregar_dados(arquivo):
+
+    clientes = []
+    contas = []
     
     try:
-        with open(ROOT_PATH / "log.txt", "rb") as arquivo:
-            arquivo.seek(-2, os.SEEK_END)
-            while arquivo.read(1) != b'\n':
-                arquivo.seek(-2, io.SEEK_CUR)
-            ultima_linha = arquivo.readline().decode()
+        with open(arquivo, "r") as arquivo:
+            
+            for linha in arquivo:
 
-            return ultima_linha
+                p_Fisica = re.findall(r'PessoaFisica: \(([^)]+)\)', linha)
+
+                for x in p_Fisica:
+                    x = x.replace("'", "").replace(" ", "")
+                    x = x.split(',')
+                    x = [str(x[0]), str(x[1])]
+                    if x[0] not in [cliente.cpf for cliente in clientes]:
+                        clientes.append(PessoaFisica(cpf = x[0], nome = x[1], endereco = "", data_nascimento = ""))
+            
+                c_Corrente = re.findall(r'ContaCorrente: \(([^)]+)\)', linha)
+            
+                for i in c_Corrente:
+                    i = i.replace("'", "").replace(" ", "")
+                    i = i.split(',')
+                    i = [str(i[0]), int(i[1]), str(i[2]), str(i[3])]
+                    cliente_correspondente = next((cliente for cliente in clientes if cliente.cpf == i[3]), None)
+                    if  cliente_correspondente and i[1] not in [conta.numero for conta in contas]:
+                        contas.append(ContaCorrente(numero = i[1], cliente = cliente_correspondente))
+
+            return clientes, contas
+    
     except FileNotFoundError:
-        return False
+        print("Arquivo não encontrado!")
 
 def log_transacao(func):
     def wrapper(*args, **kwargs):
@@ -435,16 +456,15 @@ if __name__ == "__main__":
     clientes = []
     contas = []
 
-    if os.path.exists(ROOT_PATH / "log.txt"):
-        if os.path.getsize(ROOT_PATH / "log.txt") > 0:
+    if os.path.exists(ROOT_PATH / "log.txt") and os.path.getsize(ROOT_PATH / "log.txt") > 0:
 
-            main(clientes, contas)
-
-        else:
-            main(clientes, contas)
+        clientes, contas = carregar_dados(ROOT_PATH / "log.txt")
 
     else:
 
-        open(ROOT_PATH / "log.txt", 'w').close()
+        clientes = []
+        contas = []
 
-        main(clientes, contas)
+
+
+    main(clientes, contas)
