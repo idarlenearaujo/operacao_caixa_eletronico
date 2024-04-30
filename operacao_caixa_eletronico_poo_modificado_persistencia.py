@@ -295,7 +295,9 @@ def carregar_dados(arquivo):
                             (cli for cli in clientes if cli.cpf == i[3]), None
                         )
 
-                        if match_cli and i[1] not in [conta.numero for conta in contas]:
+                        if (match_cli and
+                            i[1] not in
+                                [conta.numero for conta in contas]):
                             # Criando um novo objeto ContaCorrente
                             conta = ContaCorrente.nova_conta(match_cli, i[1])
                             # Adicionando conta na lista de contas
