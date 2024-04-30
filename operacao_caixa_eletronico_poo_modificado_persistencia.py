@@ -74,7 +74,7 @@ class Conta:
     def nova_conta(cls, cliente, numero):
         return cls(numero, cliente)
 
-    @ property
+    @property
     def saldo(self):
         return self._saldo
 
@@ -133,7 +133,7 @@ class ContaCorrente(Conta):
 
     def sacar(self, valor):
         for transacao in self.historico.transacoes:
-            if transacao['tipo'] == Saque.__name__:
+            if transacao["tipo"] == Saque.__name__:
                 self.lista_saques.append(transacao)
 
         numero_saques = len(self.lista_saques)
@@ -153,17 +153,20 @@ class ContaCorrente(Conta):
         return False
 
     def __repr__(self) -> str:
-        return (f"{self.__class__.__name__}: "
-                f"('{self.agencia}', "
-                f"'{self.numero}', "
-                f"'{self.cliente.nome}', "
-                f"'{self.cliente.cpf}')")
+        return (
+            f"{self.__class__.__name__}: "
+            f"('{self.agencia}', "
+            f"'{self.numero}', "
+            f"'{self.cliente.nome}', "
+            f"'{self.cliente.cpf}')"
+        )
 
     def __str__(self):
         return f"""
             Agência:\t{self.agencia}
             C/C:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
+            CPF:\t{self.cliente.cpf}
         """
 
 
@@ -178,15 +181,19 @@ class Historico:
 
     def adicionar_transacao(self, transacao):
         self._transacoes.append(
-            {"tipo": transacao.__class__.__name__,
-             "valor": transacao.valor,
-             "data": datetime.now().strftime("%d-%m-%Y  %H:%M:%S")}
+            {
+                "tipo": transacao.__class__.__name__,
+                "valor": transacao.valor,
+                "data": datetime.now().strftime("%d-%m-%Y  %H:%M:%S"),
+            }
         )
 
     def gerar_relatorio(self, tipo_transacao=None):
         for transacao in self._transacoes:
-            if (tipo_transacao is None or
-                    transacao['tipo'].lower() == tipo_transacao.lower()):
+            if (
+                tipo_transacao is None
+                or transacao["tipo"].lower() == tipo_transacao.lower()
+            ):
                 yield transacao
 
     def transacoes_do_dia(self):
@@ -195,7 +202,7 @@ class Historico:
         masc = "%d-%m-%Y %H:%M:%S"
 
         for transacao in self._transacoes:
-            data_transacao = datetime.strptime(transacao['data'], masc).date()
+            data_transacao = datetime.strptime(transacao["data"], masc).date()
             if data_atual == data_transacao:
                 transacoes.append(transacao)
 
@@ -245,7 +252,7 @@ class Deposito(Transacao):
 
 
 def impressoes(impress):
-    with open(ROOT_PATH / "log.txt", 'a', encoding='utf-8') as arquivo:
+    with open(ROOT_PATH / "log.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(impress)
 
 
@@ -255,34 +262,45 @@ def carregar_dados(arquivo):
     contas = []
 
     try:
+        # Abrindo o arquivo para realizar a leitura dos dados
         with open(arquivo, "r") as arquivo:
 
             for linha in arquivo:
 
-                p_Fisica = re.findall(r'PessoaFisica: \(([^)]+)\)', linha)
+                # selecionando apenas dados com PessoaFisica
+                p_Fisica = re.findall(r"PessoaFisica: \(([^)]+)\)", linha)
+                # selecionando dados apenas com ContaCorrente
+                c_Corrente = re.findall(r"ContaCorrente: \(([^)]+)\)", linha)
 
                 for x in p_Fisica:
                     x = x.replace("'", "").replace(" ", "")
-                    x = x.split(',')
+                    x = x.split(",")
+                    # Parametrizando layout para inserir um novo objeto
                     x = [str(x[0]), str(x[1])]
                     if x[0] not in [cliente.cpf for cliente in clientes]:
+                        # novo objeto e novo item na lista
                         clientes.append(PessoaFisica("", x[0], x[1], ""))
 
-                c_Corrente = re.findall(r'ContaCorrente: \(([^)]+)\)', linha)
+                for x in clientes:
+                    # Filtrando cliente por cliente
+                    cliente = filtrar_clientes(x.cpf, clientes)
 
-                for i in c_Corrente:
-                    i = i.replace("'", "").replace(" ", "")
-                    i = i.split(',')
-                    i = [str(i[0]), int(i[1]), str(i[2]), str(i[3])]
+                    for i in c_Corrente:
+                        i = i.replace("'", "").replace(" ", "")
+                        i = i.split(",")
+                        # Paramentrizando layout de ContaCorrente
+                        i = [str(i[0]), int(i[1]), str(i[2]), str(i[3])]
 
-                    match_cli = next(
-                        (cli for cli in clientes if cli.cpf == i[3]),
-                        None
-                    )
+                        match_cli = next(
+                            (cli for cli in clientes if cli.cpf == i[3]), None
+                        )
 
-                    if (match_cli and
-                            i[1] not in [conta.numero for conta in contas]):
-                        contas.append(ContaCorrente(i[1], match_cli))
+                        if match_cli and i[1] not in [conta.numero for conta in contas]:
+                            # Criando um novo objeto ContaCorrente
+                            conta = ContaCorrente.nova_conta(match_cli, i[1])
+                            # Adicionando conta na lista de contas
+                            contas.append(conta)
+                            cliente.adicionar_conta(conta)
 
             return clientes, contas
 
@@ -302,6 +320,7 @@ def log_transacao(func):
         impressoes(impress)
 
         return result
+
     return wrapper
 
 
@@ -393,15 +412,15 @@ def extrato(clientes):
 
     for transacao in conta.historico.gerar_relatorio():
         tem_transacao = True
-        if transacao['tipo'] == 'Saque':
-            data = transacao['data']
-            tipo = transacao['tipo']
-            valor = transacao['valor']
+        if transacao["tipo"] == "Saque":
+            data = transacao["data"]
+            tipo = transacao["tipo"]
+            valor = transacao["valor"]
             extrato += f"{data}\t{tipo}\t\tR$ {valor:.2f}\n"
         else:
-            data = transacao['data']
-            tipo = transacao['tipo']
-            valor = transacao['valor']
+            data = transacao["data"]
+            tipo = transacao["tipo"]
+            valor = transacao["valor"]
             extrato += f"{data}\t{tipo}\tR$ {valor:.2f}\n"
 
     if not tem_transacao:
@@ -444,13 +463,13 @@ def depositar(clientes):
         print("\n@@@ Não existe cliente para este CPF. @@@")
         return
 
-    valor = float(input("Digite o valor que deseja sacar: "))
-    transacao = Deposito(valor)
+    valor = float(input("Digite o valor que deseja depositar: "))
 
+    transacao = Deposito(valor)
     conta = filtrar_contas(cliente)
 
     if not conta:
-        print("\n@@@ Não existe conta cadastrada para esse cliente! @@@")
+        print("\n@@ Não existe conta cadastrada para esse cliente! @@")
         return
 
     cliente.realizar_transacao(conta, transacao)
@@ -492,6 +511,7 @@ def main(cli, cont):
             return False
         else:
             print("\n@@@ Opção inválida! Digite uma opção válida! @@@")
+
 
 # Iniciando o programa
 
