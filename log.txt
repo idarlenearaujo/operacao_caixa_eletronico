@@ -1,6 +1,2 @@
-30/04/2024 14:04:07|criar_cliente|([PessoaFisica: (1, 'Idarlene')],)|{}|None
-30/04/2024 14:04:28|depositar|([PessoaFisica: (1, 'Idarlene')],)|{}|None
-30/04/2024 14:04:36|extrato|([PessoaFisica: (1, 'Idarlene')],)|{}|None
-30/04/2024 14:04:51|criar_contas|(1, [PessoaFisica: (1, 'Idarlene')], [ContaCorrente: ('4034', '1', 'Idarlene', '1')])|{}|None
-30/04/2024 14:05:07|depositar|([PessoaFisica: (1, 'Idarlene')],)|{}|None
-30/04/2024 14:05:11|extrato|([PessoaFisica: (1, 'Idarlene')],)|{}|None
+02/05/2024 11:11:00|criar_cliente_conta|([PessoaFisica: (1524, 'Maria')], '1524', [], 0, 'cliente')|{}|None
+02/05/2024 11:11:07|criar_cliente_conta|([PessoaFisica: (1524, 'Maria')], '1524', [ContaCorrente: ('4034', '1', 'Maria', '1524')], 1, 'conta')|{}|None
